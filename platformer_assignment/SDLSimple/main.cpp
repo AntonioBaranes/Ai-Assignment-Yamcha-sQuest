@@ -286,7 +286,7 @@ void render() {
         player_pos.y += 1;
         player_pos.x -= 1.5f;
         Utility::draw_text(&g_shader_program, g_font_texture_id, "Yamcha Died!", 0.3f,
-            0.05f, glm::vec3(5.0f, -3.5f, 0.0f));
+            0.05f, player_pos);
     }
     else if (curr_lev == Level_Beaten) {
         glm::vec3 player_pos = g_curr_scene->get_state().player->get_position();
@@ -300,7 +300,7 @@ void render() {
         player_pos.y += 1;
         player_pos.x -= 2.5f;
         Utility::draw_text(&g_shader_program, g_font_texture_id, "Yamcha Won!", 0.3f,
-            0.05f, glm::vec3(5.0f, -3.5f, 0.0f));
+            0.05f, player_pos);
     }
 
     SDL_GL_SwapWindow(g_display_window);
@@ -332,18 +332,17 @@ void update() {
 
     g_view_matrix = glm::mat4(1.0f);
 
-    glm::vec3 player_pos = g_curr_scene->get_state().player->get_position();
 
-    // Define vertical and horizontal boundaries for the camera to follow the player smoothly
+    //X and Y camera movement
+    glm::vec3 player_pos = g_curr_scene->get_state().player->get_position();
     float camera_x = player_pos.x > LEVEL1_LEFT_EDGE ? -player_pos.x : -5.0f;
-    float camera_y = glm::clamp(-player_pos.y, -2.0f, 3.75f); // Adjust clamp values as needed for your level's design
+    float camera_y = glm::clamp(-player_pos.y, -2.0f, 3.75f); 
 
     g_view_matrix = glm::translate(
         glm::mat4(1.0f),
         glm::vec3(camera_x, camera_y, 0.0f)
     );
 
-    // Add any effects offsets
     g_view_matrix = glm::translate(g_view_matrix, g_effects->get_view_offset());
 
 
